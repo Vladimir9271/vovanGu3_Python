@@ -8,6 +8,11 @@ class Animals(abc.ABC):
     @abc.abstractmethod
     def pick_up(self):pass
 
+    @property
+    def age(self):
+        return self._age
+
+
 class Beasts(Animals):
     def __init__(self, name , age, colour_coat, presence_toy):
         super().__init__(name, age)
@@ -38,13 +43,15 @@ class Dog(Beasts):
         print("Woof!")
 
     def get_name(self):
-         super().get_name()
+        super().get_name()
 
     def get_age(self):
-        super().get_age()
+        return super().get_age()
 
     def get_presence_toy(self):
         super().get_presence_toy()
 
-Dog1 = Dog('Sharik',6, 'red' , True)
+dog1 = Dog('Sharik',6, 'red' , True)
+dog1.pick_up()
 
+print(dog1.get_age() )
