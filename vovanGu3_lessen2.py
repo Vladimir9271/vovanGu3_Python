@@ -43,15 +43,16 @@ class Dog(Beasts):
         print("Woof!")
 
     def get_name(self):
-        super().get_name()
+        return super().get_name()
 
     def get_age(self):
         return super().get_age()
 
     def get_presence_toy(self):
-        super().get_presence_toy()
+        return super().get_presence_toy()
 
 dog1 = Dog('Sharik',6, 'red' , True)
 dog1.pick_up()
 
-print(dog1.get_age() )
+print(dog1.get_age())
+dog1.submit_vote()
