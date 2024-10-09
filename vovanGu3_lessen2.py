@@ -46,5 +46,5 @@ class Dog(Beasts):
     def get_presence_toy(self):
         super().get_presence_toy()
 
-fdog = Dog('we',6, 'red' , True)
-fdog.pick_up()
+Dog1 = Dog('Sharik',6, 'red' , True)
+
