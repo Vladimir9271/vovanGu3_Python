@@ -13,7 +13,7 @@ def gen_sqr(number):
 
 a = gen_sqr
 
-with open("classmates.csv", mode="w", encoding='utf-8') as w_file:
+with open("out.csv", mode="w", encoding='utf-8') as w_file:
     file_writer = csv.writer(w_file, delimiter=",", lineterminator="\r")
     for i in a(len(data)):
         file_writer.writerow([i])
