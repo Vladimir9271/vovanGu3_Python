@@ -1,19 +1,22 @@
 import json
 import csv
 
+def reading_file(log_file):
+    with open(log_file, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+        for i in data:
+            # Проверка на принадлежность к США и использование Safari 4.0
+            if ('+1' in i.get('phoneNumber', '') or i.get('phoneNumber', '').startswith('1')) and '4.0 Safari' in i.get('userAgent', ''):
+                print(i)
+                yield i['name'], i['address'], i['email']
 
-with open('in.json') as file:
-    data = json.load(file)
 
-def gen_sqr(number):
-   for i in data:
-       if i['phoneNumber'][0] == "1" or i['phoneNumber'][0] == "+" and i['phoneNumber'][1] == "1":
-           if '4.0 Safari' in i['userAgent']:
-               yield i['name'], i['phoneNumber'], i['userAgent']
+def write_to_csv(output_file, generator):
+    with open(output_file, 'w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(['name', 'address', 'email'])  # заголовок
+        writer.writerows(generator)  # запись данных из генератора
 
-a = gen_sqr
 
-with open("out.csv", mode="w", encoding='utf-8') as w_file:
-    file_writer = csv.writer(w_file, delimiter=",", lineterminator="\r")
-    for i in a(len(data)):
-        file_writer.writerow([i])
+generator = reading_file("in.json")
+write_to_csv("out.csv", generator)
