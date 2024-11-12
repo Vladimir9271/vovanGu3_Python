@@ -1,22 +1,32 @@
 import json
 import csv
-
-def reading_file(log_file):
-    with open(log_file, 'r', encoding='utf-8') as file:
-        data = json.load(file)
-        for i in data:
-            # Проверка на принадлежность к США и использование Safari 4.0
-            if ('+1' in i.get('phoneNumber', '') or i.get('phoneNumber', '').startswith('1')) and '4.0 Safari' in i.get('userAgent', ''):
-                print(i)
-                yield i['name'], i['address'], i['email']
+from typing import Generator
 
 
-def write_to_csv(output_file, generator):
-    with open(output_file, 'w', newline='', encoding='utf-8') as file:
+def read_json_file(file_path: str) -> list:
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return json.load(file)
+
+
+def filter_users(users: list) -> Generator:
+    for user in users:
+        if (('+1' in user.get('phoneNumber', '') or user.get('phoneNumber', '').startswith('1'))
+                and '4.0 Safari' in user.get('userAgent', '')):# Проверка
+            yield user['name'], user['address'], user['email']
+
+
+def write_to_csv(file_path: str,
+                 rows: Generator[tuple[str, str, str], None, None]) -> None:
+    with open(file_path, 'w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerow(['name', 'address', 'email'])  # заголовок
-        writer.writerows(generator)  # запись данных из генератора
+        writer.writerow(['name', 'address', 'email'])
+        writer.writerows(rows)
 
 
-generator = reading_file("in.json")
-write_to_csv("out.csv", generator)
+log_file_path = "in.json"
+output_csv_path = "out.csv"
+
+users_data = read_json_file(log_file_path)
+filtered_users = filter_users(users_data)
+write_to_csv(output_csv_path, filtered_users)
+
